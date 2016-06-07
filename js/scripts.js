@@ -44,11 +44,16 @@ var path = svg.selectAll("path")
    .data(pie(avg))
   .enter().append("path")
     .attr("fill", function(d, i) { return color(i); })
-    .attr("d", arc);
+    .attr("d", arc)
+    .attr("id",function(d, i){return "A"+(i+1)})
+    .attr("onmouseover", "showContent(this.id)")
+        });
 
 
 });
-});
 
 
+function showContent(id){
+    console.log("es funktioniert!");
+}
 //function createDonutChar(avg[]){
