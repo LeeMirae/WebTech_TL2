@@ -73,3 +73,28 @@ strong{
 
 #inhalt{
 }
+
+/*temporär*/	
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+/*temporär*/
+text {
+  font: 10px sans-serif;
+}
+/*temporär*/
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+#donut_chart{
+	position: absolute;
+	float:left;
+}
