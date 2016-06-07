@@ -2,19 +2,74 @@
 /* CSS Document */
 
 p {
-	font-weight: bold;
-	color:#1CBFA3;
-	font-size:24px;
+	color:#00457d;
+	font-size:14px;
+	font-weight:lighter;
+	font-family:  "Open Sans",Arial,Helvetica,sans-serif;
+	clear:both;
 	}
 
 h1 {
-	font-weight: bold;
-	color:#1CBFA3;
-	font-size:35px;
+	font-size:24px;
+	font-weight:lighter;
+	color:#00457d;
+	font-family:  "Open Sans",Arial,Helvetica,sans-serif;
+	}
+	
+h2 {
+	font-size:20px;
+	color:#00457d;
+	font-weight:lighter;
+	font-family:  "Open Sans",Arial,Helvetica,sans-serif;
+	float:left;
+	padding-right: 10px;
 	}
 
-h2 {
-	font-weight: bold;
-	color:#1CBFA3;
-	font-size:30px;
+h3 {
+	font-size:14px;
+	color:#CFCFCF;
+	font-weight:lighter;
+	font-family:  "Open Sans",Arial,Helvetica,sans-serif;
+	float:left;
 	}
+
+h4 {
+	font-size:14px;
+	color:#00457d;
+	font-weight:lighter;
+	font-family:  "Open Sans",Arial,Helvetica,sans-serif;
+	}
+
+hr{
+border:solid #CFCFCF 1px;
+height:1px;
+}
+
+tr, td{
+	font-size:12px;
+	color:#00457d;
+	font-weight:lighter;
+	font-family:  "Open Sans",Arial,Helvetica,sans-serif;
+	padding-right:20px;
+}
+
+strong{
+	font-weight:bold;
+}
+
+#wrapper {
+	width: 980px;
+	margin: 20px auto;
+	padding: 10px;
+	border-color: #00457d;
+	border-width: 2px;
+	border-style: solid;
+	}
+
+#chart{
+	float:left;
+	padding-right: 50px;
+}
+
+#inhalt{
+}
