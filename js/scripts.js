@@ -6,23 +6,26 @@
 //	});	
 //});
 
+var modules;
+var array = [];
+var idTable;
+
 $(document).ready(function() {
 $.getJSON("php/moduleGroups.php", function(data){
 
-
-var modules = data;
-var array = $.makeArray(data);
+modules = data;
+array = $.makeArray(data);
 console.log(modules);
 
 var avg = [];
 
-for (i =0; i<modules["groups"].length; i++){
+for (var i =0; i<modules["groups"].length; i++){
 avg[i] = (modules["groups"][i].minECTS + modules["groups"][i].maxECTS)/2 ;
 console.log(avg[i]);
 }
 
-var width = 460,
-    height = 300,
+var width = 600,
+    height = 440,
     radius = Math.min(width, height) / 2;
 
 var color = d3.scale.category20();
@@ -54,6 +57,45 @@ var path = svg.selectAll("path")
 
 
 function showContent(id){
-    console.log("es funktioniert!");
+
+    //if ($('#tableinchart').is(':empty')){
+    //var tablearea = document.getElementById('tableinchart');
+    //var table = document.createElement('table');
+    
+   // if (table.rows.length<4){
+ //   for (var i = 1; i<4;i++){
+  //  var tr = document.createElement('tr');
+   // tr.appendChild( document.createElement('td') );
+   // table.appendChild(tr);
+   // }
+    //  tablearea.appendChild(table);
+    // }
+  
+    var index = findIndexByKeyValue(modules["groups"],'id',id);
+    var name = modules["groups"][index].name;
+    var ects;
+    if (modules["groups"][index].minECTS == modules["groups"][index].maxECTS) {
+        ects = "[" + modules["groups"][index].minECTS + " ECTS-Punkte]"; 
+    } else {
+    var ects = "[" + modules["groups"][index].minECTS + "-" + modules["groups"][index].maxECTS + " ECTS-Punkte]";
+    }
+    
+    $('#tr1').text(id);
+    $('#tr2').text(name);
+    $('#tr3').text(ects);
+
+  //  table.rows[1].cells[0].appendChild(document.createTextNode(name));
+ //   table.rows[2].cells[0].appendChild(document.createTextNode(ects));
+    }
+    //}
+
+
+function findIndexByKeyValue(array, key, valuetosearch) {
+ 
+for (var j = 0; j < array.length; j++) {
+ 
+if (array[j][key] == valuetosearch) {
+return j;
+}}
 }
 //function createDonutChar(avg[]){

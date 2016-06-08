@@ -70,39 +70,24 @@ strong{
 	border-style: solid;
 	}
 
-table{
-	width:450px;	
+#modulesTable{
+	width:450px;
+	float:right;
 	}
 
 #chart{
 	float:left;
-	padding-right: 50px;
+	padding-right:50px;
 }
 
 #inhalt{
+	float:right;
 }
 
-/*temporär*/	
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 960px;
-}
 
-/*temporär*/
-text {
-  font: 10px sans-serif;
-}
-/*temporär*/
-
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-#donut_chart{
-	position: absolute;
-	float:left;
+#tableChart {
+	position:absolute;
+	padding-left:250px;
+	padding-top: 180px;
+	 
 }
