@@ -58,7 +58,7 @@ var path = svg.selectAll("path")
 });
 
 function hideContent(id){
-    $('smallTable').hide();
+    $('#smallTable').hide();
 }
 
 
@@ -90,6 +90,7 @@ function showContent(id){
     $('#tr1').text(id);
     $('#tr2').text(name);
     $('#tr3').text(ects);
+    $('#smallTable').show();
 
   //  table.rows[1].cells[0].appendChild(document.createTextNode(name));
  //   table.rows[2].cells[0].appendChild(document.createTextNode(ects));
