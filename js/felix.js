@@ -1,16 +1,22 @@
 // JavaScript Document
 
+function showContentInTable(moduleID){
+  $('#loadingmessage').show();
+  $.getJSON("php/moduleGroups.php",{module_details:moduleID},
+    function(data, textStatus, jqXHR) {
+    var kuerzel = data.kuerzel;
+    var description = data.description;
+    var semester = "";
+    var minECTS = this.minECTS;
+    var maxETCS = this.maxECTS;
+    var modulname = this.name;
+    var beschreibung = "";
 
+    $('#description').html("<p>"+this.description+"</p>");
 
-function getModules(module){
-	
-	$.get("php/moduleGroups.php",
-	 {module_details:module},
-	 function(data,status){
-	 	console.log(data);
-	 });
+    });
+  $('#loadingmessage').hide();
 }
-
 
 
 function getModuleContent(module){

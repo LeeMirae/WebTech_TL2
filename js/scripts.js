@@ -28,7 +28,7 @@ var width = 600,
     height = 440,
     radius = Math.min(width, height) / 2;
 
-var color = d3.scale.category20();
+var color = d3.scale.category10();
 
 var pie = d3.layout.pie()
     .sort(null);
@@ -49,11 +49,18 @@ var path = svg.selectAll("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc)
     .attr("id",function(d, i){return "A"+(i+1);})
-    .attr("onmouseover", "showContent(this.id)");
+    .attr("onmouseover", "showContent(this.id)")
+    .attr("onmouseout", "hideContent(this.id)")
+    .attr("onclick","showContentInTable(this.id)");
         });
 
 
 });
+
+function hideContent(id){
+    $('smallTable').hide();
+}
+
 
 
 function showContent(id){
@@ -97,5 +104,18 @@ for (var j = 0; j < array.length; j++) {
 if (array[j][key] == valuetosearch) {
 return j;
 }}
+}
+
+function showContentInTable(moduleID){
+  $('#loadingmessage').show();
+  $.getJSON("php/moduleGroups.php",{module_details:moduleID},
+    function(data) {
+  
+    console.log(data);
+
+    $('#description').html("<p>"+data.description+"test"+"</p>");
+
+    });
+  $('#loadingmessage').hide();
 }
 //function createDonutChar(avg[]){
