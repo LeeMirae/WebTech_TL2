@@ -8,9 +8,9 @@
 
 var modules;
 var array = [];
-var idTable;
 
 $(document).ready(function() {
+"use strict";
 $.getJSON("php/moduleGroups.php", function(data){
 
 modules = data;
@@ -48,8 +48,8 @@ var path = svg.selectAll("path")
   .enter().append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc)
-    .attr("id",function(d, i){return "A"+(i+1)})
-    .attr("onmouseover", "showContent(this.id)")
+    .attr("id",function(d, i){return "A"+(i+1);})
+    .attr("onmouseover", "showContent(this.id)");
         });
 
 
