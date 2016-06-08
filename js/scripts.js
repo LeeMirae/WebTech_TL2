@@ -114,7 +114,7 @@ function showContentInTable(moduleID){
   
     console.log(data);
 
-    $('#description').html("<p>"+data.description+"test"+"</p>");
+    $('#description').html("<p>"+data.details.description+"test"+"</p>");
 
     });
   $('#loadingmessage').hide();
