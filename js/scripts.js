@@ -111,10 +111,65 @@ function showContentInTable(moduleID){
   $('#loadingmessage').show();
   $.getJSON("php/moduleGroups.php",{module_details:moduleID},
     function(data) {
-  
-    console.log(data);
+    $('#description').html("<p>"+data.details.description+"</p>");
+    $('#minECTS').html("<p>"+data.details.minECTS+"</p>");
+    $('#maxECTS').html("<p>"+data.details.maxECTS+"</p>");
+    $('#moduleName').html("<p>"+data.details.name+"</p>");
 
-    $('#description').html("<p>"+data.details.description+"test"+"</p>");
+// mandatoryCourses bauen
+    var mandatoryCourseArray = "";
+    $.each(data.details.courses, 
+        function(index, value){
+            if (data.details.courses.mandatory == true){
+        mandatoryCourseArray += data.details.courses[i];
+    }
+    });
+
+    if (mandatoryCourseArray != null){
+        document.getElementById("mandatory").show();
+
+        for (var i =0; i<mandatoryCourseArray.length; i++){
+            var table = document.getElementById("modulesTable");
+            var row = table.insertRow(i+1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+
+            cell1.innerHTML = mandatoryCourseArray[i].short_name;
+            cell2.innerHTML = mandatoryCourseArray[i].full_name;
+            cell3.innerHTML = mandatoryCourseArray[i].semester;
+            cell4.innerHTML = mandatoryCourseArray[i].ects;
+        }
+    }
+
+// nonMandatory Courses bauen
+    var nonMandatoryCourseArray = "";
+    $.each(data.details.courses, 
+        function(index, value){
+            if (data.details.courses.mandatory == false){
+        mandatoryCourseArray += data.details.courses[i];
+    }
+    });
+
+    if (nonMandatoryCourseArray != null){
+        document.getElementById("nonMandatory").show();
+
+        for (var i =0; i<nonMandatoryCourseArray.length; i++){
+            var table = document.getElementById("nonMandatory");
+            var row = table.insertRow(i+1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+
+            cell1.innerHTML = nonMandatoryCourseArray[i].short_name;
+            cell2.innerHTML = nonMandatoryCourseArray[i].full_name;
+            cell3.innerHTML = nonMandatoryCourseArray[i].semester;
+            cell4.innerHTML = nonMandatoryCourseArray[i].ects;
+        }
+    }
+    // document.getElementById('mandatory').style.display ='block';
 
     });
   $('#loadingmessage').hide();
