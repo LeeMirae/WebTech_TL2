@@ -112,13 +112,12 @@ function showContentInTable(moduleID){
   $.getJSON("php/moduleGroups.php",{module_details:moduleID},
     function(data) {
     $('#description').html("<p>"+data.details.description+"</p>");
-    $('#moduleID').html(moduleID);
+    $('h2').html('<strong>'+ moduleID +'</strong>' + " "+ data.details.name);
     if (data.details.maxECTS != data.details.minECTS){
     $('#ECTS').html("["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]");
 } else {
     $('#ECTS').html("["+data.details.minECTS+" ECTS-Punkte]");
 }
-    $('#moduleName').html("<p>"+data.details.name+"</p>");
 console.log(data);
 
 // mandatoryCourses bauen
