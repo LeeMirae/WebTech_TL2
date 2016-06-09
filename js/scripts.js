@@ -112,25 +112,30 @@ function showContentInTable(moduleID){
   $.getJSON("php/moduleGroups.php",{module_details:moduleID},
     function(data) {
     $('#description').html("<p>"+data.details.description+"</p>");
-    $('#minECTS').html("<p>"+data.details.minECTS+"</p>");
-    $('#maxECTS').html("<p>"+data.details.maxECTS+"</p>");
+    $('#moduleID').html(moduleID);
+    if (data.details.maxECTS != data.details.minECTS){
+    $('#ECTS').html("["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]");
+} else {
+    $('#ECTS').html("["+data.details.minECTS+" ECTS-Punkte]");
+}
     $('#moduleName').html("<p>"+data.details.name+"</p>");
+console.log(data);
 
 // mandatoryCourses bauen
-    var mandatoryCourseArray = "";
+    var mandatoryCourseArray = [];
     $.each(data.details.courses, 
-        function(index, value){
-            if (data.details.courses.mandatory == true){
-        mandatoryCourseArray += data.details.courses[i];
+        function(mandatory, value){
+            if (value == true){
+        mandatoryCourseArray.push(data.details.courses);
     }
     });
+    $('#ECTS').html("test"+mandatoryCourseArray[1]);
 
     if (mandatoryCourseArray != null){
-        document.getElementById("mandatory").show();
 
         for (var i =0; i<mandatoryCourseArray.length; i++){
             var table = document.getElementById("modulesTable");
-            var row = table.insertRow(i+1);
+            var row = table.insertRow(4+1);
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
@@ -148,16 +153,15 @@ function showContentInTable(moduleID){
     $.each(data.details.courses, 
         function(index, value){
             if (data.details.courses.mandatory == false){
-        mandatoryCourseArray += data.details.courses[i];
+        mandatoryCourseArray += data.details.courses[index];
     }
     });
 
     if (nonMandatoryCourseArray != null){
-        document.getElementById("nonMandatory").show();
 
         for (var i =0; i<nonMandatoryCourseArray.length; i++){
             var table = document.getElementById("nonMandatory");
-            var row = table.insertRow(i+1);
+            var row = table.insertRow(2+1);
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
