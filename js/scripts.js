@@ -114,9 +114,9 @@ function showContentInTable(moduleID){
     $('#description').html("<p>"+data.details.description+"</p>");
     $('h2').html('<strong>'+ moduleID +'</strong>' + " "+ data.details.name);
     if (data.details.maxECTS != data.details.minECTS){
-    $('#ECTS').html("["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]");
+    $('h3').html("["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]");
 } else {
-    $('#ECTS').html("["+data.details.minECTS+" ECTS-Punkte]");
+    $('h3').html("["+data.details.minECTS+" ECTS-Punkte]");
 }
 console.log(data);
 
