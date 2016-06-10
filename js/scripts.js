@@ -217,6 +217,6 @@ function showContentInTable(moduleID){
     }
     
     // document.getElementById('mandatory').style.display ='block'; 
-    // $('#loadingmessage').hide();
+     $('#loadingmessage').hide();
     });
 }
