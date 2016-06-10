@@ -9,6 +9,7 @@
 var modules;
 var array = [];
 
+
 $(document).ready(function() {
 "use strict";
 $.getJSON("php/moduleGroups.php", function(data){
@@ -121,54 +122,86 @@ function showContentInTable(moduleID){
 console.log(data);
 
 // mandatoryCourses bauen
-    var mandatoryCourseArray = [];
-    $.each(data.details.courses, 
-        function(mandatory, value){
-            if (value == true){
-        mandatoryCourseArray.push(data.details.courses);
-    }
+   var mandatoryCourseArray = [];
+   $.each(data.details.courses, 
+      function(mandatory){
+          if (this.mandatory){
+      mandatoryCourseArray.push(this);
+       console.log(mandatoryCourseArray.length);
+           }
+
     });
-    $('#ECTS').html("test"+mandatoryCourseArray[1]);
 
-    if (mandatoryCourseArray != null){
+    
+    //$('#ECTS').html("test"+mandatoryCourseArray[1]);
+        var table = document.getElementById("mandatory");
+        var count = 0;
+        
+        $('#mandatory tr').remove();
+        var row = table.insertRow(0);
+     //   document.getElementById("mandatory").insertRow(0);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = "<h4>Pflichtmodule</h4>";
+        
+    //    document.getElementById("mandatory").insertRow(1);
+        row = table.insertRow(1);
+        cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
 
-        for (var i =0; i<mandatoryCourseArray.length; i++){
-            var table = document.getElementById("modulesTable");
-            var row = table.insertRow(4+1);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-
-            cell1.innerHTML = mandatoryCourseArray[i].short_name;
-            cell2.innerHTML = mandatoryCourseArray[i].full_name;
-            cell3.innerHTML = mandatoryCourseArray[i].semester;
-            cell4.innerHTML = mandatoryCourseArray[i].ects;
+        cell1.innerHTML = "<strong>Kürzel</strong>";
+        cell2.innerHTML = "<strong>Bezeichnung</strong>";
+        cell3.innerHTML = "<strong>Semester</strong>";
+        cell4.innerHTML = "<strong>ECTS</strong>";
+         
+         if (mandatoryCourseArray != null){
+        
+     for (var i = 0; i<mandatoryCourseArray.length;i++){
+      
+        var row = table.insertRow(2+i);
+         //   row.id = 'id' + i;
+          //  console.log(row.id);
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          var cell4 = row.insertCell(3);
+         
+    //      row.id = 'id' + rowId;
+     //     console.log(row.id);
+        
+          cell1.innerHTML = mandatoryCourseArray[count].short_name;
+          cell2.innerHTML = mandatoryCourseArray[count].full_name;
+          cell3.innerHTML = mandatoryCourseArray[count].semester;
+          cell4.innerHTML = mandatoryCourseArray[count].ects;
+        //  rowId++;
+          count ++;
         }
-    }
+         } 
+         
 
 // nonMandatory Courses bauen
-    var nonMandatoryCourseArray = "";
+    var nonMandatoryCourseArray = new Array();
     $.each(data.details.courses, 
-        function(index, value){
-            if (data.details.courses.mandatory == false){
+        function(index){
+            if (!data.details.courses.mandatory){
         mandatoryCourseArray += data.details.courses[index];
     }
     });
 
     if (nonMandatoryCourseArray != null){
 
-        for (var i =0; i<nonMandatoryCourseArray.length; i++){
-            var table = document.getElementById("nonMandatory");
-            var row = table.insertRow(2+1);
+       for (var i =0; i<nonMandatoryCourseArray.length; i++){
+         var table = document.getElementById("nonMandatory");
+           var row = table.insertRow(2+1);
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
 
             cell1.innerHTML = nonMandatoryCourseArray[i].short_name;
-            cell2.innerHTML = nonMandatoryCourseArray[i].full_name;
-            cell3.innerHTML = nonMandatoryCourseArray[i].semester;
+           cell2.innerHTML = nonMandatoryCourseArray[i].full_name;
+          cell3.innerHTML = nonMandatoryCourseArray[i].semester;
             cell4.innerHTML = nonMandatoryCourseArray[i].ects;
         }
     }

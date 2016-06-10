@@ -76,6 +76,16 @@ tr, td{
 #modulesTable{
 	width:500px;
 	}
+	
+#mandatory{
+	width:500px;
+	}
+
+#nonMandatory{
+	width:500px;
+	}
+		
+		
 
 #chart{
 	float:left;
