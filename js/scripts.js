@@ -14,6 +14,7 @@ console.log(modules);
 
 var avg = [];
 
+$('#loadingmessage').hide();
 for (var i =0; i<modules["groups"].length; i++){
 avg[i] = (modules["groups"][i].minECTS + modules["groups"][i].maxECTS)/2 ;
 console.log(avg[i]);
@@ -217,6 +218,6 @@ function showContentInTable(moduleID){
     }
     
     // document.getElementById('mandatory').style.display ='block'; 
-     $('#loadingmessage').hide();
+    $('#loadingmessage').hide();
     });
 }
