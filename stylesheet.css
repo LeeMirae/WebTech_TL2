@@ -76,6 +76,16 @@ tr, td{
 #modulesTable{
 	width:500px;
 	}
+	
+#mandatory{
+	width:500px;
+	}
+
+#nonMandatory{
+	width:500px;
+	}
+		
+		
 
 #chart{
 	float:left;
@@ -130,6 +140,16 @@ tr, td{
 	margin-bottom: 0px;
 	text-align:center;
 	padding-left:20px;
+}
+
+#imgDiv{
+	position:relative;
+}
+
+#loadingmessage{
+ position:absolute;
+   top:50%;
+   left:50%;
 }
 
 #clear{

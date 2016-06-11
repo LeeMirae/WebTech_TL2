@@ -1,13 +1,8 @@
 // JavaScript Document
 
-//$(document).ready(function() {
-//	$.get("php/moduleGroups.php", function(data){
-//	alert("Data: " + data);
-//	});	
-//});
-
 var modules;
 var array = [];
+
 
 $(document).ready(function() {
 "use strict";
@@ -19,6 +14,7 @@ console.log(modules);
 
 var avg = [];
 
+$('#loadingmessage').hide();
 for (var i =0; i<modules["groups"].length; i++){
 avg[i] = (modules["groups"][i].minECTS + modules["groups"][i].maxECTS)/2 ;
 console.log(avg[i]);
@@ -95,7 +91,6 @@ function showContent(id){
   //  table.rows[1].cells[0].appendChild(document.createTextNode(name));
  //   table.rows[2].cells[0].appendChild(document.createTextNode(ects));
     }
-    //}
 
 
 function findIndexByKeyValue(array, key, valuetosearch) {
@@ -104,7 +99,8 @@ for (var j = 0; j < array.length; j++) {
  
 if (array[j][key] == valuetosearch) {
 return j;
-}}
+        }
+    }
 }
 
 function showContentInTable(moduleID){
@@ -112,70 +108,116 @@ function showContentInTable(moduleID){
   $.getJSON("php/moduleGroups.php",{module_details:moduleID},
     function(data) {
     $('#description').html("<p>"+data.details.description+"</p>");
-    $('#moduleID').html(moduleID);
+    $('h2').html('<strong>'+ moduleID +'</strong>' + " "+ data.details.name);
     if (data.details.maxECTS != data.details.minECTS){
-    $('#ECTS').html("["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]");
+    $('h3').html("["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]");
 } else {
-    $('#ECTS').html("["+data.details.minECTS+" ECTS-Punkte]");
+    $('h3').html("["+data.details.minECTS+" ECTS-Punkte]");
 }
-    $('#moduleName').html("<p>"+data.details.name+"</p>");
-console.log(data);
+//console.log(data);
 
 // mandatoryCourses bauen
-    var mandatoryCourseArray = [];
-    $.each(data.details.courses, 
-        function(mandatory, value){
-            if (value == true){
-        mandatoryCourseArray.push(courses);
-    }
+
+   var mandatoryCourseArray = [];
+   $.each(data.details.courses, 
+      function(mandatory){
+          if (this.mandatory){
+      mandatoryCourseArray.push(this);
+      // console.log(mandatoryCourseArray.length);
+           }
     });
-    $('#ECTS').html("test"+mandatoryCourseArray[1]);
 
-    if (mandatoryCourseArray != null){
+    
+    //$('#ECTS').html("test"+mandatoryCourseArray[1]);
+        var table = document.getElementById("mandatory");
+        
+        $('#mandatory tr').remove();
+        var row = table.insertRow(0);
+     //   document.getElementById("mandatory").insertRow(0);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = "<h4>Pflichtmodule</h4>";
+        
+    //    document.getElementById("mandatory").insertRow(1);
+        row = table.insertRow(1);
+        cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
 
-        for (var i =0; i<mandatoryCourseArray.length; i++){
-            var table = document.getElementById("modulesTable");
-            var row = table.insertRow(4+1);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-
-            cell1.innerHTML = mandatoryCourseArray[i].short_name;
-            cell2.innerHTML = mandatoryCourseArray[i].full_name;
-            cell3.innerHTML = mandatoryCourseArray[i].semester;
-            cell4.innerHTML = mandatoryCourseArray[i].ects;
+        cell1.innerHTML = "<strong>Kürzel</strong>";
+        cell2.innerHTML = "<strong>Bezeichnung</strong>";
+        cell3.innerHTML = "<strong>Semester</strong>";
+        cell4.innerHTML = "<strong>ECTS</strong>";
+         
+         if (mandatoryCourseArray != null){
+        
+    for (var i = 0; i<mandatoryCourseArray.length;i++){
+      
+         row = table.insertRow(2+i);
+         //   row.id = 'id' + i;
+          //  console.log(row.id);
+         var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+         var cell3 = row.insertCell(2);
+         var cell4 = row.insertCell(3);
+         
+    //      row.id = 'id' + rowId;
+     //     console.log(row.id);
+        
+         cell1.innerHTML = mandatoryCourseArray[i].short_name;
+          cell2.innerHTML = mandatoryCourseArray[i].full_name;
+          cell3.innerHTML = mandatoryCourseArray[i].semester;
+         cell4.innerHTML = mandatoryCourseArray[i].ects;
+        //  rowId++;
         }
-    }
+        } 
+         
 
 // nonMandatory Courses bauen
-    var nonMandatoryCourseArray = "";
+    var nonMandatoryCourseArray = [];
     $.each(data.details.courses, 
-        function(index, value){
-            if (data.details.courses.mandatory == false){
-        mandatoryCourseArray += data.details.courses[index];
+        function(mandatory){
+            if (!this.mandatory){
+                nonMandatoryCourseArray.push(this);
+     console.log(mandatoryCourseArray.length);
     }
     });
+    
+       $('#nonMandatory tr').remove();
+     var tableOpt = document.getElementById("nonMandatory");
+       var rowOpt = tableOpt.insertRow(0);
+         var  cellOpt1 = rowOpt.insertCell(0);
+       cellOpt1.innerHTML = "<h4>Wahlmodule</h4>";
+        
+       var rowOpt = tableOpt.insertRow(1);
+       cellOpt1 = rowOpt.insertCell(0);
+       var cellOpt2 = rowOpt.insertCell(1);
+       var cellOpt3 = rowOpt.insertCell(2);
+       var cellOpt4 = rowOpt.insertCell(3);
 
-    if (nonMandatoryCourseArray != null){
+       cellOpt1.innerHTML = "<strong>Kürzel</strong>";
+        cellOpt2.innerHTML = "<strong>Bezeichnung</strong>";
+        cellOpt3.innerHTML = "<strong>Semester</strong>";
+       cellOpt4.innerHTML = "<strong>ECTS</strong>";
 
-        for (var i =0; i<nonMandatoryCourseArray.length; i++){
-            var table = document.getElementById("nonMandatory");
-            var row = table.insertRow(2+1);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
+  if (nonMandatoryCourseArray != null){
+     
+       for (var j =0; j<nonMandatoryCourseArray.length;j++){
+         
+            rowOpt = tableOpt.insertRow(2+j);
+            cellOpt1 = rowOpt.insertCell(0);
+            cellOpt2 = rowOpt.insertCell(1);
+            cellOpt3 = rowOpt.insertCell(2);
+            cellOpt4 = rowOpt.insertCell(3);
 
-            cell1.innerHTML = nonMandatoryCourseArray[i].short_name;
-            cell2.innerHTML = nonMandatoryCourseArray[i].full_name;
-            cell3.innerHTML = nonMandatoryCourseArray[i].semester;
-            cell4.innerHTML = nonMandatoryCourseArray[i].ects;
+        cellOpt1.innerHTML = nonMandatoryCourseArray[j].short_name;
+        cellOpt2.innerHTML = nonMandatoryCourseArray[j].full_name;
+        cellOpt3.innerHTML = nonMandatoryCourseArray[j].semester;
+        cellOpt4.innerHTML = nonMandatoryCourseArray[j].ects;
         }
     }
-    // document.getElementById('mandatory').style.display ='block';
-
+    
+    // document.getElementById('mandatory').style.display ='block'; 
+    $('#loadingmessage').hide();
     });
-  $('#loadingmessage').hide();
 }
-//function createDonutChar(avg[]){
