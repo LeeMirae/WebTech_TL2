@@ -126,7 +126,7 @@ console.log(data);
     $.each(data.details.courses, 
         function(mandatory, value){
             if (value == true){
-        mandatoryCourseArray.push(data.details.courses);
+        mandatoryCourseArray.push(courses);
     }
     });
     $('#ECTS').html("test"+mandatoryCourseArray[1]);
