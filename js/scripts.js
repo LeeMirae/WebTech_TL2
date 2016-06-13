@@ -27,10 +27,12 @@ var width = 600,
     height = 440,
     radius = Math.min(width, height) / 2;
 
+
 var color = d3.scale.category10();
 
 var pie = d3.layout.pie()
     .sort(null);
+
 
 var arc = d3.svg.arc()
     .innerRadius(radius - 100)
@@ -42,6 +44,29 @@ var svg = d3.select("#chart").append("svg")
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+/*
+var $container = $('#chart'),
+        τ = 2 * Math.PI,
+        width = $container.width(),
+        height = $container.height(),
+        outerRadius = Math.min(width,height)/2,
+        innerRadius = (outerRadius/5)*4,
+        fontSize = (Math.min(width,height)/4);
+
+var arc = d3.svg.arc()
+	.innerRadius(innerRadius)
+	.outerRadius(outerRadius);
+
+var svg = d3.select('#chart').append("svg")
+        .attr("width", '100%')
+        .attr("height", '100%')
+        .attr('viewBox','0 0 '+Math.min(width,height) +' '+Math.min(width,height) )
+        .attr('preserveAspectRatio','xMinYMin')
+        .append("g")
+        .attr("transform", "translate(" + Math.min(width,height) / 2 + "," + Math.min(width,height) / 2 + ")");
+		
+*/
+
 var path = svg.selectAll("path")
    .data(pie(avg))
   .enter().append("path")
@@ -52,14 +77,21 @@ var path = svg.selectAll("path")
     .attr("onmouseout", "hideContent(this.id)")
     .attr("onclick","showContentInTable(this.id)");
         });
-
-
 });
+
+/* 
+
+var text = svg.append("text")
+        .text('0%')
+        .attr("text-anchor", "middle")
+        .style("font-size",fontSize+'px')
+        .attr("dy",fontSize/3)
+        .attr("dx",2);
+*/
 
 function hideContent(id){
     $('#smallTable').hide();
 }
-
 
 
 function showContent(id){
