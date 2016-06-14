@@ -23,8 +23,8 @@ avg[i] = (modules["groups"][i].minECTS + modules["groups"][i].maxECTS)/2 ;
 console.log(avg[i]);
 }
 
-var width = 600,
-    height = 440,
+var width = $("#chart").width(),
+    height = width,
     radius = Math.min(width, height) / 2;
 
 
@@ -38,11 +38,9 @@ var arc = d3.svg.arc()
     .innerRadius(radius - 100)
     .outerRadius(radius - 50);
 
-var svg = d3.select("#chart").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+
 
 /*
 var $container = $('#chart'),
@@ -54,9 +52,9 @@ var $container = $('#chart'),
         fontSize = (Math.min(width,height)/4);
 
 var arc = d3.svg.arc()
-	.innerRadius(innerRadius)
-	.outerRadius(outerRadius);
-
+  .innerRadius(innerRadius)
+  .outerRadius(outerRadius);
+*/
 var svg = d3.select('#chart').append("svg")
         .attr("width", '100%')
         .attr("height", '100%')
@@ -64,8 +62,8 @@ var svg = d3.select('#chart').append("svg")
         .attr('preserveAspectRatio','xMinYMin')
         .append("g")
         .attr("transform", "translate(" + Math.min(width,height) / 2 + "," + Math.min(width,height) / 2 + ")");
-		
-*/
+    
+
 
 var path = svg.selectAll("path")
    .data(pie(avg))
