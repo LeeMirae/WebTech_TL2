@@ -18,10 +18,13 @@ console.log(modules);
 var avg = [];
 
 $('#loadingmessage').hide();
+
 for (var i =0; i<modules["groups"].length; i++){
 avg[i] = (modules["groups"][i].minECTS + modules["groups"][i].maxECTS)/2 ;
 console.log(avg[i]);
 }
+
+//build a donut diagram
 
 var width = $("#chart").width(),
     height = width,
@@ -37,8 +40,6 @@ var pie = d3.layout.pie()
 var arc = d3.svg.arc()
     .innerRadius(radius - 100)
     .outerRadius(radius - 50);
-
-
 
 
 
@@ -79,30 +80,13 @@ var path = svg.selectAll("path")
 });
 
 
-
-
+//Helper-function
 function hideContent(id){
     $('#smallTable').hide();
 }
 
-
+//shows content inside the donut diagram
 function showContent(id){
-
-    //if ($('#tableinchart').is(':empty')){
-    //var tablearea = document.getElementById('tableinchart');
-    //var table = document.createElement('table');
-    
-   // if (table.rows.length<4){
- //   for (var i = 1; i<4;i++){
-  //  var tr = document.createElement('tr');
-   // tr.appendChild( document.createElement('td') );
-   // table.appendChild(tr);
-   // }
-    //  tablearea.appendChild(table);
-    // }
-
-
-
   
     var index = findIndexByKeyValue(modules["groups"],'id',id);
     var name = modules["groups"][index].name;
@@ -118,10 +102,9 @@ function showContent(id){
     $('#tr3').text(ects);
     $('#smallTable').show();
 
-  //  table.rows[1].cells[0].appendChild(document.createTextNode(name));
- //   table.rows[2].cells[0].appendChild(document.createTextNode(ects));
     }
 
+//Helper-function
 function findIndexByKeyValue(array, key, valuetosearch) {
  
 for (var j = 0; j < array.length; j++) {
@@ -133,8 +116,12 @@ return j;
 }
 
 
-var trigger = true
+
+
+var trigger = true;
   // trigger: onclick
+  
+ //shows content in the table on the right side 
 function showContentInTable(moduleID){
 if (trigger){
   trigger = false;
@@ -142,10 +129,12 @@ if (trigger){
     $('#loadingmessage').show();
     
   // create headTable
+  
+  //remove rows from modulesTable
+   $('#modulesTable tr').remove();
+   
   var headTable = document.getElementById("modulesTable");
-  while (headTable.rows.length > 0){
-    headTable.deleteRow(0);
-  }
+  
   var headRow1 = headTable.insertRow(0); // id, ects
   var headRow2 = headTable.insertRow(1); // description
   var headRow3 = headTable.insertRow(2); // grey line
@@ -176,17 +165,12 @@ if (trigger){
   h = document.createElement("HR");
   headCell3.id = "greyLine";
   
-  
 
   // create mandatory & nonMandatory table
-  var mandatoryTable = document.getElementById('mandatory');
-  while (mandatoryTable.rows.length > 0){
-        mandatoryTable.deleteRow(0);
-      }
-  var nonMandatoryTable = document.getElementById('nonMandatory');
-  while (nonMandatoryTable.rows.length > 0){
-        nonMandatoryTable.deleteRow(0);
-      }
+  
+ //remove rows from mandatory and nonMandatory tables 
+    $('#mandatory tr').remove();
+    $('#nonMandatory tr').remove();
   
   // fetch data
   $.getJSON("php/moduleGroups.php",{module_details:moduleID},
@@ -199,7 +183,7 @@ if (trigger){
     $('h3').html("["+data.details.minECTS+" ECTS-Punkte]");
 }
 
-// mandatoryCourses bauen
+// prepare mandatory courses data for table
 
    var mandatoryCourseArray = [];
    $.each(data.details.courses, 
@@ -209,12 +193,48 @@ if (trigger){
       }
     }
     );
+  
+  buildATable("mandatory", mandatoryCourseArray, "Pflichtmodule");
+  
+//prepare non-mandatory courses data for table
+    var nonMandatoryCourseArray = [];
+    $.each(data.details.courses, 
+        function(mandatory){
+            if (!this.mandatory){
+                nonMandatoryCourseArray.push(this);
+     console.log(mandatoryCourseArray.length);
+    }
+    });
+    
+    
+    buildATable("nonMandatory", nonMandatoryCourseArray, "Wahlmodule");
+ 
 
-    if (mandatoryCourseArray.length != 0){
-      var table = document.getElementById("mandatory");
+    // delete grey line, if no courses exist
+    if (nonMandatoryCourseArray.length == 0 & mandatoryCourseArray.length == 0){
+     document.getElementById('greyLine').style.visibility = "hidden";
+    }
+
+    
+    // document.getElementById('mandatory').style.display ='block';
+    
+    headCell3.appendChild(h);
+    $('#loadingmessage').hide();
+    // create greyLine in the end so it's not visible while data is being fetched
+    
+    });
+}
+trigger = true;
+}
+
+//Helper-function, builds a table on the right side
+function buildATable(id, array, h4){
+  
+  if (array.length != 0){
+      var table = document.getElementById(id.toString());
       var row = table.insertRow(0);
       var cell1 = row.insertCell(0);
-      cell1.innerHTML = "<h4>Pflichtmodule</h4>";
+      cell1.innerHTML = "<h4>" + h4 + "</h4>";
         
       row = table.insertRow(1);
       cell1 = row.insertCell(0);
@@ -228,7 +248,7 @@ if (trigger){
       cell4.innerHTML = "<strong>ECTS</strong>";
          
      
-      for (var i = 0; i<mandatoryCourseArray.length;i++){
+      for (var i = 0; i<array.length;i++){
       
         row = table.insertRow(2+i);
         var cell1 = row.insertCell(0);
@@ -236,71 +256,14 @@ if (trigger){
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
         
-        cell1.innerHTML = mandatoryCourseArray[i].short_name;
-        cell2.innerHTML = mandatoryCourseArray[i].full_name;
-        cell3.innerHTML = mandatoryCourseArray[i].semester;
-        cell4.innerHTML = mandatoryCourseArray[i].ects;
+        cell1.innerHTML = array[i].short_name;
+        cell2.innerHTML = array[i].full_name;
+        cell3.innerHTML = array[i].semester;
+        cell4.innerHTML = array[i].ects;
       }
     } 
-         
-// nonMandatory Courses bauen
-    var nonMandatoryCourseArray = [];
-    $.each(data.details.courses, 
-        function(mandatory){
-            if (!this.mandatory){
-                nonMandatoryCourseArray.push(this);
-     console.log(mandatoryCourseArray.length);
-    }
-    });
-    
-    if (nonMandatoryCourseArray.length != 0){
-     var tableOpt = document.getElementById("nonMandatory");
-       var rowOpt = tableOpt.insertRow(0);
-         var  cellOpt1 = rowOpt.insertCell(0);
-       cellOpt1.innerHTML = "<h4>Wahlmodule</h4>";
-        
-       var rowOpt = tableOpt.insertRow(1);
-       cellOpt1 = rowOpt.insertCell(0);
-       var cellOpt2 = rowOpt.insertCell(1);
-       var cellOpt3 = rowOpt.insertCell(2);
-       var cellOpt4 = rowOpt.insertCell(3);
-
-       cellOpt1.innerHTML = "<strong>Kürzel</strong>";
-        cellOpt2.innerHTML = "<strong>Bezeichnung</strong>";
-        cellOpt3.innerHTML = "<strong>Semester</strong>";
-       cellOpt4.innerHTML = "<strong>ECTS</strong>";
-
   
-     
-       for (var j =0; j<nonMandatoryCourseArray.length;j++){
-         
-            rowOpt = tableOpt.insertRow(2+j);
-            cellOpt1 = rowOpt.insertCell(0);
-            cellOpt2 = rowOpt.insertCell(1);
-            cellOpt3 = rowOpt.insertCell(2);
-            cellOpt4 = rowOpt.insertCell(3);
-
-        cellOpt1.innerHTML = nonMandatoryCourseArray[j].short_name;
-        cellOpt2.innerHTML = nonMandatoryCourseArray[j].full_name;
-        cellOpt3.innerHTML = nonMandatoryCourseArray[j].semester;
-        cellOpt4.innerHTML = nonMandatoryCourseArray[j].ects;
-        }
-      
-    }
-    // delete grey line, if no courses exist
-    if (nonMandatoryCourseArray.length == 0 & mandatoryCourseArray.length == 0){
-     document.getElementById('greyLine').style.visibility = "hidden";
-    }
-
-    
-    // document.getElementById('mandatory').style.display ='block'; 
-    headCell3.appendChild(h);
-    $('#loadingmessage').hide();
-    // create greyLine in the end so it's not visible while data is being fetched
-    
-    });
-}
-trigger = true;
+  
 }
 
 
