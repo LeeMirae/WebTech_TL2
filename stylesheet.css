@@ -95,21 +95,21 @@ tr, td{
 
 
 #tr1{
-	font-size:20px;
+	font-size:4.0vmin;
 	color:#00457d;
 	font-weight:bold;
 	text-align:center;
 }
 
 #tr2{
-	font-size:14px;
+	font-size:3.0vmin;
 	color:#00457d;
 	font-weight:lighter;
 	text-align:center;
 }
 
 #tr3{
-	font-size:12px;
+	font-size:3.0vmin;
 	color:#CFCFCF;
 	font-weight:lighter;
 	text-align:center;

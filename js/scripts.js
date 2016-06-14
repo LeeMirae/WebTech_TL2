@@ -63,6 +63,7 @@ var svg = d3.select('#chart').append("svg")
         .append("g")
         .attr("transform", "translate(" + Math.min(width,height) / 2 + "," + Math.min(width,height) / 2 + ")");
     
+$('tr1').attr("width", '100%');
 
 
 var path = svg.selectAll("path")
@@ -77,15 +78,8 @@ var path = svg.selectAll("path")
         });
 });
 
-/* 
 
-var text = svg.append("text")
-        .text('0%')
-        .attr("text-anchor", "middle")
-        .style("font-size",fontSize+'px')
-        .attr("dy",fontSize/3)
-        .attr("dx",2);
-*/
+
 
 function hideContent(id){
     $('#smallTable').hide();
@@ -139,11 +133,14 @@ return j;
 }
 
 
+var trigger = true
   // trigger: onclick
 function showContentInTable(moduleID){
-  $('#loadingmessage').show();
+if (trigger){
+  trigger = false;
 
-
+    $('#loadingmessage').show();
+    
   // create headTable
   var headTable = document.getElementById("modulesTable");
   while (headTable.rows.length > 0){
@@ -273,7 +270,7 @@ function showContentInTable(moduleID){
         cellOpt3.innerHTML = "<strong>Semester</strong>";
        cellOpt4.innerHTML = "<strong>ECTS</strong>";
 
-  if (nonMandatoryCourseArray != null){
+  
      
        for (var j =0; j<nonMandatoryCourseArray.length;j++){
          
@@ -288,7 +285,7 @@ function showContentInTable(moduleID){
         cellOpt3.innerHTML = nonMandatoryCourseArray[j].semester;
         cellOpt4.innerHTML = nonMandatoryCourseArray[j].ects;
         }
-      }
+      
     }
     // delete grey line, if no courses exist
     if (nonMandatoryCourseArray.length == 0 & mandatoryCourseArray.length == 0){
@@ -297,9 +294,13 @@ function showContentInTable(moduleID){
 
     
     // document.getElementById('mandatory').style.display ='block'; 
+    headCell3.appendChild(h);
     $('#loadingmessage').hide();
     // create greyLine in the end so it's not visible while data is being fetched
-    headCell3.appendChild(h);
+    
     });
-
 }
+trigger = true;
+}
+
+
