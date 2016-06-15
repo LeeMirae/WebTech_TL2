@@ -14,7 +14,6 @@ $.getJSON("php/moduleGroups.php", function(data){
 modules = data;
 array = $.makeArray(data);
 console.log(modules);
-
 var avg = [];
 
 $('#loadingmessage').hide();
@@ -30,32 +29,15 @@ var width = $("#chart").width(),
     height = width,
     radius = Math.min(width, height) / 2;
 
-
 var color = d3.scale.category10();
 
 var pie = d3.layout.pie()
     .sort(null);
 
-
 var arc = d3.svg.arc()
     .innerRadius(radius - 100)
     .outerRadius(radius - 50);
 
-
-
-/*
-var $container = $('#chart'),
-        τ = 2 * Math.PI,
-        width = $container.width(),
-        height = $container.height(),
-        outerRadius = Math.min(width,height)/2,
-        innerRadius = (outerRadius/5)*4,
-        fontSize = (Math.min(width,height)/4);
-
-var arc = d3.svg.arc()
-  .innerRadius(innerRadius)
-  .outerRadius(outerRadius);
-*/
 var svg = d3.select('#chart').append("svg")
         .attr("width", '100%')
         .attr("height", '100%')
@@ -66,7 +48,6 @@ var svg = d3.select('#chart').append("svg")
     
 $('tr1').attr("width", '100%');
 
-
 var path = svg.selectAll("path")
    .data(pie(avg))
   .enter().append("path")
@@ -76,13 +57,13 @@ var path = svg.selectAll("path")
     .attr("onmouseover", "showContent(this.id)")
     .attr("onmouseout", "hideContent(this.id)")
     .attr("onclick","showContentInTable(this.id)");
-        });
+  });
 });
 
 
 //Helper-function
 function hideContent(id){
-    $('#smallTable').hide();
+  $('#smallTable').hide();
 }
 
 //shows content inside the donut diagram
@@ -97,39 +78,42 @@ function showContent(id){
     var ects = "[" + modules["groups"][index].minECTS + "-" + modules["groups"][index].maxECTS + " ECTS-Punkte]";
     }
     
-    $('#tr1').text(id);
-    $('#tr2').text(name);
-    $('#tr3').text(ects);
-    $('#smallTable').show();
-
-    }
+  $('#tr1').text(id);
+  $('#tr2').text(name);
+  $('#tr3').text(ects);
+  $('#smallTable').show();   
+}
 
 //Helper-function
 function findIndexByKeyValue(array, key, valuetosearch) {
- 
-for (var j = 0; j < array.length; j++) {
- 
-if (array[j][key] == valuetosearch) {
-return j;
-        }
+  for (var j = 0; j < array.length; j++) {
+    if (array[j][key] == valuetosearch) {
+    return j;
     }
+  }
 }
 
 
 
 
-var trigger = true;
-  // trigger: onclick
   
  //shows content in the table on the right side 
 function showContentInTable(moduleID){
-if (trigger){
-  trigger = false;
-
     $('#loadingmessage').show();
-    
-  // create headTable
-  
+
+// fetch data and write to variables
+  $.getJSON("php/moduleGroups.php",{module_details:moduleID},
+    function(data) {
+      var description = data.details.description;
+      var nameAndID = '<strong>'+ moduleID +'</strong>' + " "+ data.details.name;
+    if (data.details.maxECTS != data.details.minECTS){
+      var h3 = "["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]";
+} else {
+  var h3 = "["+data.details.minECTS+" ECTS-Punkte]";
+}
+
+
+// create headTable
   //remove rows from modulesTable
    $('#modulesTable tr').remove();
    
@@ -165,67 +149,50 @@ if (trigger){
   h = document.createElement("HR");
   headCell3.id = "greyLine";
   
-
-  // create mandatory & nonMandatory table
-  
  //remove rows from mandatory and nonMandatory tables 
     $('#mandatory tr').remove();
     $('#nonMandatory tr').remove();
   
-  // fetch data
-  $.getJSON("php/moduleGroups.php",{module_details:moduleID},
-    function(data) {
-    $('#description').html(data.details.description);
-    $('#moduleID').html('<strong>'+ moduleID +'</strong>' + " "+ data.details.name);
-    if (data.details.maxECTS != data.details.minECTS){
-    $('h3').html("["+data.details.minECTS+" - "+data.details.maxECTS+" ECTS-Punkte]");
-} else {
-    $('h3').html("["+data.details.minECTS+" ECTS-Punkte]");
-}
+// write data to table
+  $('#description').html(description);
+  $('#moduleID').html(nameAndID);
+  $('h3').html(h3);
 
 // prepare mandatory courses data for table
-
-   var mandatoryCourseArray = [];
-   $.each(data.details.courses, 
+  var mandatoryCourseArray = [];
+  $.each(data.details.courses, 
     function(mandatory){
       if (this.mandatory){
         mandatoryCourseArray.push(this);
       }
     }
-    );
+  );
   
   buildATable("mandatory", mandatoryCourseArray, "Pflichtmodule");
   
 //prepare non-mandatory courses data for table
-    var nonMandatoryCourseArray = [];
+  var nonMandatoryCourseArray = [];
     $.each(data.details.courses, 
-        function(mandatory){
-            if (!this.mandatory){
-                nonMandatoryCourseArray.push(this);
-     console.log(mandatoryCourseArray.length);
-    }
-    });
-    
-    
-    buildATable("nonMandatory", nonMandatoryCourseArray, "Wahlmodule");
- 
+      function(mandatory){
+        if (!this.mandatory){
+          nonMandatoryCourseArray.push(this);
+          console.log(mandatoryCourseArray.length);
+        }
+      }
+    );
+        
+  buildATable("nonMandatory", nonMandatoryCourseArray, "Wahlmodule");
 
-    // delete grey line, if no courses exist
-    if (nonMandatoryCourseArray.length == 0 & mandatoryCourseArray.length == 0){
-     document.getElementById('greyLine').style.visibility = "hidden";
-    }
+// delete grey line, if no courses exist
+  if (nonMandatoryCourseArray.length == 0 & mandatoryCourseArray.length == 0){
+    document.getElementById('greyLine').style.visibility = "hidden";
+  }
+// create greyLine in the end so it's not visible while data is being fetched
+  headCell3.appendChild(h);
+  $('#loadingmessage').hide();
+  });
+}
 
-    
-    // document.getElementById('mandatory').style.display ='block';
-    
-    headCell3.appendChild(h);
-    $('#loadingmessage').hide();
-    // create greyLine in the end so it's not visible while data is being fetched
-    
-    });
-}
-trigger = true;
-}
 
 //Helper-function, builds a table on the right side
 function buildATable(id, array, h4){
