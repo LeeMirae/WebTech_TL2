@@ -1,0 +1,1 @@
+Der zu verwendende Browser ist Firefox, Version 46.0.1
